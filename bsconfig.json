@@ -1,0 +1,27 @@
+{
+  "name": "browser",
+  "version": "0.1.0",
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "namespace": true,
+  "bs-dependencies": [
+    "@bs-oak/base",
+    "@bs-oak/core",
+    "@bs-oak/html",
+    "@bs-oak/json",
+    "@bs-oak/url",
+    "@bs-oak/virtual-dom",
+    "bs-webapi"
+  ],
+  "warnings": {
+    "error": "+101"
+  },
+  "refmt": 3
+}
