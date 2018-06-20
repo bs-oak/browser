@@ -1,7 +1,24 @@
-open Webapi.Dom
-open BsOakBase
 open BsOakVirtualDom
-open BsOakBase.Infix
+
+let (>>) f g x = g (f x)
+
+module Option = struct 
+  let map fn = function
+    | Some a -> Some (fn a)
+    | None -> None
+
+  let with_default d = function
+    | Some a -> a
+    | None -> d    
+
+  let and_then fn = function
+    | Some a -> fn a
+    | None -> None    
+
+  let unwrap_exn msg = function
+    | Some a -> a
+    | None -> failwith(msg)    
+end
 
 type 'flags config =
   { flags: 'flags
@@ -53,23 +70,23 @@ let document ~init ~update ~view ~subscriptions = fun cfg ->
     
     (* update title *)
     let title = 
-      document
-      |> Document.asHtmlDocument
-      |> Option.map HtmlDocument.title
+      Webapi.Dom.document
+      |> Webapi.Dom.Document.asHtmlDocument
+      |> Option.map Webapi.Dom.HtmlDocument.title
       |> Option.with_default ""
     in
     if title <> doc.title then
-      document
-      |> Document.asHtmlDocument
-      |> Option.map (fun el -> HtmlDocument.setTitle el doc.title)  
+      Webapi.Dom.document
+      |> Webapi.Dom.Document.asHtmlDocument
+      |> Option.map (fun el -> Webapi.Dom.HtmlDocument.setTitle el doc.title)  
       |> Option.with_default ()
   in
   let stepper_builder send_to_app model =
     let vdom =
-      document
-      |> Document.asHtmlDocument
-      |> Option.and_then HtmlDocument.body
-      |> Option.unsafe_unwrap "failed to get document.body element"
+      Webapi.Dom.document
+      |> Webapi.Dom.Document.asHtmlDocument
+      |> Option.and_then Webapi.Dom.HtmlDocument.body
+      |> Option.unwrap_exn "failed to get document.body element"
       |> Virtual_dom.create
       |> ref
     in
@@ -86,16 +103,16 @@ let document ~init ~update ~view ~subscriptions = fun cfg ->
 let application ~init ~update ~view ~subscriptions ~on_navigation =
   let string_to_url str =
     BsOakUrl.Url.from_string str
-    |> Option.unsafe_unwrap "failed to create url from window.location"
+    |> Option.unwrap_exn "failed to create url from window.location"
   in
   let init flags =
     init 
       flags
-      (window
-      |> Window.location
-      |> Location.href
+      (Webapi.Dom.window
+      |> Webapi.Dom.Window.location
+      |> Webapi.Dom.Location.href
       |> BsOakUrl.Url.from_string
-      |> BsOakBase.Option.unsafe_unwrap "failed to create url from window.location")
+      |> Option.unwrap_exn "failed to create url from window.location")
   in
   let subscriptions model =
     BsOakCore.Sub.batch 

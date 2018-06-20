@@ -1,12 +1,10 @@
 module Fx = BsOakCore.Fx
 
-open Webapi.Dom
-
 let ctx = Fx.ctx ()
 
 let load url =
   Fx.Scheduler.binding (fun _callback -> 
-    let () = Window.setLocation window url in
+    let () = Webapi.Dom.Window.setLocation Webapi.Dom.window url in
     (* kill *)
     fun _ -> ()
   )
@@ -14,9 +12,9 @@ let load url =
 let reload () =
   Fx.Scheduler.binding (fun _callback -> 
     let () =
-      window
-      |> Window.location
-      |> Location.reload      
+      Webapi.Dom.window
+      |> Webapi.Dom.Window.location
+      |> Webapi.Dom.Location.reload      
     in
     (* kill *)
     fun _ -> ()
@@ -98,10 +96,10 @@ let window_on event_name send_to_self =
       ()
     in
     let () = 
-      Window.addEventListener event_name handler window 
+      Webapi.Dom.Window.addEventListener event_name handler Webapi.Dom.window 
     in
     let kill_func _pid =
-      Window.removeEventListener event_name handler window
+      Webapi.Dom.Window.removeEventListener event_name handler Webapi.Dom.window
     in
     kill_func
   in
@@ -109,9 +107,9 @@ let window_on event_name send_to_self =
 
 let report_url name router =
   let location_href =
-    window
-    |> Window.location
-    |> Location.href
+    Webapi.Dom.window
+    |> Webapi.Dom.Window.location
+    |> Webapi.Dom.Location.href
   in
   let handler _evt = Fx.send_to_self router location_href in
   window_on name handler
@@ -123,16 +121,16 @@ let push_state url =
   Fx.Scheduler.binding (fun callback ->
     let kill_func _ = () in
     let history_state = 
-      window
-      |> Window.history
-      |> History.state
+      Webapi.Dom.window
+      |> Webapi.Dom.Window.history
+      |> Webapi.Dom.History.state
     in
     let () =    
-      window
-      |> Window.history
-      |> History.pushState history_state "" url
+      Webapi.Dom.window
+      |> Webapi.Dom.Window.history
+      |> Webapi.Dom.History.pushState history_state "" url
     in
-    let loc_href = location |> Location.href in
+    let loc_href = Webapi.Dom.location |> Webapi.Dom.Location.href in
     let () = callback (Fx.Scheduler.succeed loc_href) in
     kill_func
   )  
@@ -141,16 +139,16 @@ let replace_state url =
   Fx.Scheduler.binding (fun callback ->
     let kill_func _ = () in
     let history_state = 
-      window
-      |> Window.history
-      |> History.state
+      Webapi.Dom.window
+      |> Webapi.Dom.Window.history
+      |> Webapi.Dom.History.state
     in
     let () =    
-      window
-      |> Window.history
-      |> History.replaceState history_state "" url
+      Webapi.Dom.window
+      |> Webapi.Dom.Window.history
+      |> Webapi.Dom.History.replaceState history_state "" url
     in
-    let loc_href = location |> Location.href in
+    let loc_href = Webapi.Dom.location |> Webapi.Dom.Location.href in
     let () = callback (Fx.Scheduler.succeed loc_href) in
     kill_func
   )  
@@ -162,9 +160,9 @@ let go n =
       if 
         n <> 0 
       then 
-        window
-        |> Window.history
-        |> History.go n
+        Webapi.Dom.window
+        |> Webapi.Dom.Window.history
+        |> Webapi.Dom.History.go n
     in
     let () = callback (Fx.Scheduler.succeed ()) in
     kill_none
