@@ -61,6 +61,9 @@ type 'msg document =
   ; body : 'msg BsOakHtml.Html.t list
   }
 
+let map_document fn doc =
+  { doc with body = List.map (BsOakHtml.Html.map fn) doc.body }
+
 let document ~init ~update ~view ~subscriptions = fun cfg ->
   let stepper send_to_app vdom model =
     (* update vdom *)
@@ -101,10 +104,6 @@ let document ~init ~update ~view ~subscriptions = fun cfg ->
     ~stepper_builder: stepper_builder
 
 let application ~init ~update ~view ~subscriptions ~on_navigation =
-  let string_to_url str =
-    BsOakUrl.Url.from_string str
-    |> Option.unwrap_exn "failed to create url from window.location"
-  in
   let init flags =
     init 
       flags
@@ -114,9 +113,13 @@ let application ~init ~update ~view ~subscriptions ~on_navigation =
       |> BsOakUrl.Url.from_string
       |> Option.unwrap_exn "failed to create url from window.location")
   in
+  let string_to_url str =
+    BsOakUrl.Url.from_string str
+    |> Option.unwrap_exn "failed to create url from window.location"
+  in  
   let subscriptions model =
     BsOakCore.Sub.batch 
-      [ Navigation.listen (string_to_url >> on_navigation)
+      [ Navigation.listen (string_to_url >> on_navigation model) 
       ; subscriptions model
       ]
   in

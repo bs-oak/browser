@@ -18,6 +18,8 @@ type 'msg document =
   ; body : 'msg BsOakHtml.Html.t list
   }
 
+val map_document : ('a -> 'b) -> 'a document -> 'b document
+
 val document : 
   init: ('flags -> 'model * 'msg BsOakCore.Cmd.t) ->
   update: ('msg -> 'model -> 'model * 'msg BsOakCore.Cmd.t) ->
@@ -30,5 +32,5 @@ val application :
   update: ('msg -> 'model -> 'model * 'msg BsOakCore.Cmd.t) ->
   view: ('model -> 'msg document) ->
   subscriptions: ('model -> 'msg BsOakCore.Sub.t) ->
-  on_navigation: (BsOakUrl.Url.url -> 'msg) ->
+  on_navigation: ('model -> BsOakUrl.Url.url -> 'msg) ->
   'flags program
