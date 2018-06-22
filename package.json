@@ -1,6 +1,6 @@
 {
   "name": "@bs-oak/browser",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "scripts": {
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
@@ -18,10 +18,10 @@
     "bs-webapi": "^0.10.0"
   },
   "devDependencies": {
-    "@bs-oak/core": "^0.1.4",
+    "@bs-oak/core": "^0.1.7",
     "bs-platform": "^3.1.5"
   },
   "peerDependencies": {
-    "@bs-oak/core": "^0.1.4"
+    "@bs-oak/core": "^0.1.7"
   }
 }
