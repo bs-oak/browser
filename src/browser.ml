@@ -119,7 +119,7 @@ let application ~init ~update ~view ~subscriptions ~on_navigation =
   in  
   let subscriptions model =
     BsOakCore.Sub.batch 
-      [ Navigation.listen (string_to_url >> on_navigation model) 
+      [ Navigation.listen (string_to_url >> on_navigation) 
       ; subscriptions model
       ]
   in

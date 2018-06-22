@@ -32,5 +32,5 @@ val application :
   update: ('msg -> 'model -> 'model * 'msg BsOakCore.Cmd.t) ->
   view: ('model -> 'msg document) ->
   subscriptions: ('model -> 'msg BsOakCore.Sub.t) ->
-  on_navigation: ('model -> BsOakUrl.Url.url -> 'msg) ->
+  on_navigation: (BsOakUrl.Url.url -> 'msg) ->
   'flags program
