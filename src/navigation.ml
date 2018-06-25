@@ -174,20 +174,15 @@ let kill_pop_watcher (Normal pid) =
   Fx.Scheduler.kill pid
 
 let on_effects router cmds subs {pop_watcher; _} =
-
   let step_state =
     match (subs, pop_watcher) with
     | ([], Some watcher) -> 
-      let () = Js.Console.log "kill pop watcher" in
       ignore (kill_pop_watcher watcher) {subs; pop_watcher = None}
     
     | (_ :: _, None) ->
-      let () = Js.Console.log "start pop watcher" in
       Fx.Scheduler.map (fun a -> {subs; pop_watcher = Some a}) (spawn_pop_watcher router)
 
-    | (sbs, _pw) ->
-      let () = Js.Console.log "continue pop watcher" in
-      let () = Js.Console.log (List.length sbs) in
+    | (_, _) ->
       Fx.Scheduler.succeed {subs; pop_watcher}
   in
     Fx.Scheduler.sequence (List.map (cmd_help router subs) cmds)
