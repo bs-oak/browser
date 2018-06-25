@@ -1,6 +1,6 @@
 {
   "name": "@bs-oak/browser",
-  "version": "0.1.5",
+  "version": "0.1.10",
   "sources": {
     "dir": "src",
     "subdirs": true
