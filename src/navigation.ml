@@ -1,5 +1,12 @@
 module Fx = BsOakCore.Fx
 
+(* ffi *)
+
+let js_push_state: (string -> unit) = [%raw fun url -> " window.history.pushState({}, '', url) "]
+let js_replace_state: (string -> unit) = [%raw fun url -> " window.history.replaceState({}, '', url) "]
+
+(* /ffi *)
+
 let ctx = Fx.ctx ()
 
 let load url =
@@ -106,13 +113,13 @@ let window_on event_name send_to_self =
   Fx.Scheduler.spawn (Fx.Scheduler.binding binding)
 
 let report_url name router =
-  let location_href =
-    Webapi.Dom.window
-    |> Webapi.Dom.Window.location
-    |> Webapi.Dom.Location.href
-  in
-  let handler _evt = Fx.send_to_self router location_href in
-  window_on name handler
+  window_on name (fun _evt ->
+    Fx.send_to_self 
+      router
+      (Webapi.Dom.window
+      |> Webapi.Dom.Window.location
+      |> Webapi.Dom.Location.href)
+  )
 
 let spawn_pop_watcher router =
   Fx.Scheduler.map (fun x -> Normal x) (report_url "popstate" router)
@@ -120,16 +127,7 @@ let spawn_pop_watcher router =
 let push_state url =
   Fx.Scheduler.binding (fun callback ->
     let kill_func _ = () in
-    let history_state = 
-      Webapi.Dom.window
-      |> Webapi.Dom.Window.history
-      |> Webapi.Dom.History.state
-    in
-    let () =    
-      Webapi.Dom.window
-      |> Webapi.Dom.Window.history
-      |> Webapi.Dom.History.pushState history_state "" url
-    in
+    let () = js_push_state url in
     let loc_href = Webapi.Dom.location |> Webapi.Dom.Location.href in
     let () = callback (Fx.Scheduler.succeed loc_href) in
     kill_func
@@ -138,16 +136,7 @@ let push_state url =
 let replace_state url =
   Fx.Scheduler.binding (fun callback ->
     let kill_func _ = () in
-    let history_state = 
-      Webapi.Dom.window
-      |> Webapi.Dom.Window.history
-      |> Webapi.Dom.History.state
-    in
-    let () =    
-      Webapi.Dom.window
-      |> Webapi.Dom.Window.history
-      |> Webapi.Dom.History.replaceState history_state "" url
-    in
+    let () = js_replace_state url in
     let loc_href = Webapi.Dom.location |> Webapi.Dom.Location.href in
     let () = callback (Fx.Scheduler.succeed loc_href) in
     kill_func
@@ -196,7 +185,7 @@ let on_effects router cmds subs {pop_watcher; _} =
       let () = Js.Console.log "start pop watcher" in
       Fx.Scheduler.map (fun a -> {subs; pop_watcher = Some a}) (spawn_pop_watcher router)
 
-    | (sbs, pw) ->
+    | (sbs, _pw) ->
       let () = Js.Console.log "continue pop watcher" in
       let () = Js.Console.log (List.length sbs) in
       Fx.Scheduler.succeed {subs; pop_watcher}

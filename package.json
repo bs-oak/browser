@@ -1,6 +1,6 @@
 {
   "name": "@bs-oak/browser",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "scripts": {
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
