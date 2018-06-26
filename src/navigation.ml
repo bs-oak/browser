@@ -1,4 +1,6 @@
 module Fx = BsOakCore.Fx
+module Task = BsOakCore.Task
+module Cmd = BsOakCore.Cmd
 
 (* ffi *)
 
@@ -15,6 +17,7 @@ let load url =
     (* kill *)
     fun _ -> ()
   )
+  |> Task.perform (fun x -> x)
 
 let reload () =
   Fx.Scheduler.binding (fun _callback -> 
@@ -26,6 +29,7 @@ let reload () =
     (* kill *)
     fun _ -> ()
   )
+  |> Task.perform (fun x -> x)
 
 (* commands *)
 
