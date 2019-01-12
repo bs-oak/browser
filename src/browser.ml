@@ -32,7 +32,7 @@ let worker ~init ~update ~subscriptions = fun cfg ->
   let stepper _model = () in
   let stepper_builder _send_to_app _model = stepper in
   BsOakCore.Internal.program 
-    ~flags: (flags cfg)
+    ~flags: (flagsGet cfg)
     ~init: init
     ~update: update
     ~subscriptions: subscriptions
@@ -45,12 +45,12 @@ let element ~init ~update ~view ~subscriptions = fun cfg ->
     ()
   in
   let stepper_builder send_to_app model = 
-    let vdom = ref (Virtual_dom.create (node cfg)) in
+    let vdom = ref (Virtual_dom.create (nodeGet cfg)) in
     let () = stepper send_to_app vdom model in
     stepper send_to_app vdom
   in
   BsOakCore.Internal.program 
-    ~flags: (flags cfg)
+    ~flags: (flagsGet cfg)
     ~init: init
     ~update: update
     ~subscriptions: subscriptions
@@ -97,7 +97,7 @@ let document ~init ~update ~view ~subscriptions = fun cfg ->
       stepper send_to_app vdom
   in
   BsOakCore.Internal.program 
-    ~flags: (flags cfg)
+    ~flags: (flagsGet cfg)
     ~init: init
     ~update: update
     ~subscriptions: subscriptions
