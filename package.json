@@ -12,9 +12,9 @@
   "author": "Erik Lott",
   "license": "MIT",
   "dependencies": {
-    "@bs-oak/html": "^0.1.16",
+    "@bs-oak/html": "^0.1.20",
     "@bs-oak/url": "^0.1.4",
-    "@bs-oak/virtual-dom": "^0.1.8",
+    "@bs-oak/virtual-dom": "^0.2.0",
     "bs-webapi": "^0.13.1"
   },
   "devDependencies": {
