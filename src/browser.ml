@@ -93,8 +93,8 @@ let document ~init ~update ~view ~subscriptions = fun cfg ->
       |> Virtual_dom.create
       |> ref
     in
-      let () = stepper send_to_app vdom model in
-      stepper send_to_app vdom
+    let () = stepper send_to_app vdom model in
+    stepper send_to_app vdom
   in
   BsOakCore.Internal.program 
     ~flags: (flagsGet cfg)
