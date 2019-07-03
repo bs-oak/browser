@@ -13,7 +13,9 @@
   "namespace": true,
   "bs-dependencies": [
     "@bs-oak/core",
+    "@bs-oak/ext",
     "@bs-oak/html",
+    "@bs-oak/json",
     "@bs-oak/url",
     "@bs-oak/virtual-dom",
     "bs-webapi"

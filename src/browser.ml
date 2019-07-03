@@ -1,4 +1,5 @@
-open BsOakVirtualDom
+(* open BsOakVirtualDom *)
+module Virtual_dom = BsOakVirtualDom.Virtual_dom
 
 let (>>) f g x = g (f x)
 
