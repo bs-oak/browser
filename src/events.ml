@@ -115,7 +115,9 @@ let on_effects router subs state =
 let on_self_msg router {key; event} state =
   let to_message (sub_key, (MySub (_node, _name, decoder))) accum =
     if sub_key = key then
-      Decode.decode_value decoder event :: accum
+      match Decode.decode_value decoder event with
+      | Ok v -> v :: accum
+      | Error _msg -> accum
     else
       accum
   in
