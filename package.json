@@ -1,6 +1,6 @@
 {
   "name": "@bs-oak/browser",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "scripts": {
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@bs-oak/ext": "^0.2.0",
-    "@bs-oak/html": "^0.3.2",
+    "@bs-oak/html": "^0.3.3",
     "@bs-oak/json": "^0.1.6",
     "@bs-oak/url": "^0.1.4",
     "@bs-oak/virtual-dom": "^0.5.2",
